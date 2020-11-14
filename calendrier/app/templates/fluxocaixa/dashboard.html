@@ -1,0 +1,278 @@
+{% extends "menu.html" %}
+
+{% block taghead %}
+
+{% endblock %}
+
+{% block menuhead %}
+{% endblock %}
+
+{% block content %}
+  <div class="row">
+    <div class="col-xl-12 col-lg-12">
+      <div class="card shadow mb-4">
+        <!-- Card Header - Dropdown -->
+        <div class="card-header py-2">
+          <h6 class="m-0 font-weight-bold text-primary">Saldo atual</h6>
+        </div>
+        <!-- Card Body -->
+        <div class="card-body">
+          <div class="card-group">
+            <!-- Saldo atual das contas -->
+              {% for conta in saldo_contas%}
+              <!-- prevsito -->
+              <div class="col-xl-3 col-lg-3">
+                <div class="card mb-4 py-1 border-left-primary">
+                  <div class="card-body">
+                    {{ conta[0] }} - {{ "R$ %.2f"|format(conta[1]) }}
+                  </div>
+                </div>
+              </div>
+            {% endfor %}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+<!-- Content Row Realizado -->
+<div class="row">
+  <div class="col-xl-12 col-lg-12">
+    <div class="card shadow mb-4">
+      <!-- Card Header - Dropdown -->
+      <div class="card-header py-2">
+        <h6 class="m-0 font-weight-bold text-primary">Lançamentos realizados</h6>
+      </div>
+      <!-- Card Body -->
+      <div class="card-body">
+        <div class="row">
+          <div class="container">
+            <div class="row">
+              <div class="col-md-12">
+                <ul class="nav nav-tabs" id="nav-tab" role='tablist'>
+                  <li class="nav-item">
+                    <a class="nav-link active" id="tri_1-tab" data-toggle="tab" href="#tri_1" role="tab" aria-controls="tri_1" aria-selected="true">Jan/Fev/Marc</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" id="tri_4-tab" data-toggle="tab" href="#tri_4" role="tab" aria-controls="tri_4" aria-selected="false">Abr/Mai/Jun</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" id="tri_7-tab" data-toggle="tab" href="#tri_7" role="tab" aria-controls="tri_7" aria-selected="false">Jul/Ago/Set</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" id="tri_10-tab" data-toggle="tab" href="#tri_10" role="tab" aria-controls="tri_10" aria-selected="false">Out/Nov/Dez</a>
+                  </li>
+                </ul>
+                    
+                <div class="tab-content" id="myTabContent">
+                  {% for card_body in [1,4,7,10] %}
+                  <div class="tab-pane fade {% if card_body == 1 %} show active {% endif %}" id="tri_{{ card_body }}" role="tabpanel" aria-labelledby="tri_{{ card_body }}-tab">
+                    <p></p>
+                    <p class="text-success">Créditos</p>
+                    <table class="table table-bordered table-hover">
+                      <thead class="thead-light">
+                        <tr>
+                          <th scope="col">Descrição</th>
+                          <th scope="col">Data</th>
+                          <th scope="col">Valor</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {% for form in realizado_credito %}  
+                          {% if form.mes >= card_body and  form.mes <= card_body+2 %}
+                          <tr>
+                            <th>{{ form.descricao }}</th>
+                            <th>{{ form.data_efetivacao }}</th>
+                            <th>{{ "R$ %.2f"|format(form.total_realizado) }}</th>
+                          </tr>
+                          {% endif %}
+                        {% endfor %}
+                      </tbody>
+                    </table>   
+                    <p></p>
+                    <p class="text-danger">Débitos</p>
+                    <table class="table table-bordered table-hover">
+                      <thead class="thead-light">
+                        <tr>
+                          <th scope="col">Descrição</th>
+                          <th scope="col">Data</th>
+                          <th scope="col">Valor</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {% for form in realizado_debito %}  
+                          {% if (form.mes >= card_body) and (form.mes <= card_body+2) %}
+                            <tr>
+                              <th>{{ form.descricao }}</th>
+                              <th>{{ form.data_efetivacao }}</th>
+                              <th>{{ "R$ %.2f"|format(form.total_realizado) }}</th>
+                            </tr>
+                          {% endif %}
+                        {% endfor %}
+                      </tbody>
+                    </table>
+                  </div>               
+                  {% endfor %}
+                </div>  
+              </div>    
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-xl-12 col-lg-12">
+    <div class="card shadow mb-4">
+      <!-- Card Header - Dropdown -->
+      <div class="card-header py-2">
+        <h6 class="m-0 font-weight-bold text-primary">Lançamentos previsto</h6>
+      </div>
+      <!-- Card Body -->
+      <div class="card-body">
+        <div class="row">
+          <div class="container">
+            <div class="row">
+              <div class="col-md-12">
+                <ul class="nav nav-tabs" id="nav-tab" role='tablist'>
+                  <li class="nav-item">
+                    <a class="nav-link active" id="ptri_1-tab" data-toggle="tab" href="#ptri_1" role="tab" aria-controls="ptri_1" aria-selected="true">Jan/Fev/Marc</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" id="ptri_4-tab" data-toggle="tab" href="#ptri_4" role="tab" aria-controls="ptri_4" aria-selected="false">Abr/Mai/Jun</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" id="ptri_7-tab" data-toggle="tab" href="#ptri_7" role="tab" aria-controls="ptri_7" aria-selected="false">Jul/Ago/Set</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" id="ptri_10-tab" data-toggle="tab" href="#ptri_10" role="tab" aria-controls="ptri_10" aria-selected="false">Out/Nov/Dez</a>
+                  </li>
+                </ul>
+                    
+                <div class="tab-content" id="myTabContent">
+                  {% for card_body in [1,4,7,10] %}
+                  <div class="tab-pane fade {% if card_body == 1 %} show active {% endif %}" id="ptri_{{ card_body }}" role="tabpanel" aria-labelledby="ptri_{{ card_body }}-tab">
+                    <p></p>
+                    <p class="text-success">Créditos</p>
+                    <table class="table table-bordered table-hover">
+                      <thead class="thead-light">
+                        <tr>
+                          <th scope="col">Descrição</th>
+                          <th scope="col">Data</th>
+                          <th scope="col">Valor</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {% for form in previsto_credito %}  
+                          {% if form.mes >= card_body and  form.mes <= card_body+2 %}
+                          <tr>
+                            <th>{{ form.descricao }}</th>
+                            <th>{{ form.data_prevista }}</th>
+                            <th>{{ "R$ %.2f"|format(form.total_previsto) }}</th>
+                          </tr>
+                          {% endif %}
+                        {% endfor %}
+                      </tbody>
+                    </table>   
+                    <p></p>
+                    <p class="text-danger">Débitos</p>
+                    <table class="table table-bordered table-hover">
+                      <thead class="thead-light">
+                        <tr>
+                          <th scope="col">Descrição</th>
+                          <th scope="col">Data</th>
+                          <th scope="col">Valor</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {% for form in previsto_debito %}  
+                          {% if (form.mes >= card_body) and (form.mes <= card_body+2) %}
+                            <tr>
+                              <th>{{ form.descricao }}</th>
+                              <th>{{ form.data_prevista }}</th>
+                              <th>{{ "R$ %.2f"|format(form.total_previsto) }}</th>
+                            </tr>
+                          {% endif %}
+                        {% endfor %}
+                      </tbody>
+                    </table>
+                  </div>               
+                  {% endfor %}
+                </div>  
+              </div>    
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock %}
+
+
+{% block scriptmenu %}
+<script src="/static/chart.js/Chart.min.js"></script>
+<script>
+    
+  $(document).ready(function() {
+    $('#dataTable').DataTable({
+                responsive: true,
+                language: {
+                    url : '/static/datatables/translate/pt-br.json'
+                }
+            });
+
+    data = {
+        datasets: [{
+            data: [90, 20, 30],
+            backgroundColor: [
+                'rgba(255, 99, 132, 0.2)',
+                'rgba(54, 162, 235, 0.2)',
+                'rgba(255, 206, 86, 0.2)'
+                    ],
+            borderColor: [
+                'rgba(255, 99, 132, 1)',
+                'rgba(54, 162, 235, 1)',
+                'rgba(255, 206, 86, 1)'
+            ],
+            borderWidth: 1
+        }],
+
+        // These labels appear in the legend and in the tooltips when hovering different arcs
+        labels: [
+            'Red',
+            'Yellow',
+            'Blue'
+        ]
+
+    };
+
+    var ctx = document.getElementById('saldoChart');
+    
+    // For a pie chart
+    var myPieChart = new Chart(ctx, {
+        type: 'doughnut',
+        data: data,
+        options: {
+				responsive: true,
+				legend: {
+					position: 'top',
+				},
+				title: {
+					display: true,
+					text: 'Chart.js Doughnut Chart'
+				},
+				animation: {
+					animateScale: true,
+					animateRotate: true
+                },
+			}
+    });
+    
+  } );
+</script>
+
+{% endblock %}

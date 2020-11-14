@@ -1,0 +1,84 @@
+{% extends "menu.html" %}
+
+{% block menuhead %} 
+<div class="d-sm-flex align-items-center justify-content-between mb-4">
+        <h1 class="h3 mb-0 text-gray-800">{{ titulo }}</h1>
+      </div>
+{% endblock %}
+
+{% block content %}
+    <!-- Content Row -->
+    <div class="row">
+        <form action="" method="post" autocomplete="off" novalidate>
+        {{ form.hidden_tag() }}        
+        {% if operacao == 1 %}
+            <div class="form-group">
+            {{ form.nome(size=100, class='form-control', disabled=True) }}
+            </div>
+            <div class="form-group">
+            {{ form.telefone(class='form-control', disabled=True) }}
+            </div>
+            <div class="form-group">
+            {{ form.data_nasc(class='form-control', disabled=True) }}
+            </div>
+        {% else %}
+            <div class="form-group">
+            {{ form.nome(size=100, class='form-control') }}
+            {% for error in form.nome.errors %}
+                <div class="alert alert-warning alert-dismissible" id="nome_validator" style="opacity: 500; display: none;">
+                    <a href="#" class="close" data-dismiss="alert" aria-label="close">×</a>
+                    {{ error }}
+                </div>
+            {% endfor %}
+
+            </div>
+            <div class="form-group">
+            {{ form.telefone(class='form-control') }}
+            {% for error in form.telefone.errors %}
+                <div class="alert alert-warning alert-dismissible" id="telefone_validator" style="opacity: 500; display: none;">
+                    <a href="#" class="close" data-dismiss="alert" aria-label="close">×</a>
+                    {{ error }}
+                </div>
+            {% endfor %}
+
+            </div>
+            <div class="form-group">
+            {{ form.data_nasc(class='form-control') }}
+            </div>
+        {% endif %}
+        <div class="btn-group">            
+            {% if operacao == 1 %}
+                <a href="{{ url_for('clienteeditar', id=form.id) }}" class="btn btn-primary">Editar</a>
+            {% else %}
+                <button class="btn btn-primary" id="submit" type="submit">Salvar</button>
+            {% endif %}
+            <a href="{{ url_for('clientelistar') }}" class="btn btn-danger">Cancelar</a>
+        </div>
+        </form>
+    </div>
+{% endblock %}
+
+
+
+{% block scriptmenu %}
+<script>
+    
+    $(document).ready(function() {
+        /* validação dos campos */
+        $("#nome_validator").fadeTo(4000, 900).slideUp(900, function(){
+            $("#nome_validator").slideUp(9000);
+        });
+        $("#telefone_validator").fadeTo(4000, 900).slideUp(900, function(){
+            $("#telefone_validator").slideUp(9000);
+        });
+        
+        $('#data_nasc').datetimepicker({
+            format:'d/m/Y',
+            mask:true,
+            timepicker:false,
+        });
+
+        $('#telefone').mask("(99) 9999-99999");
+    });
+</script>
+{% endblock %}

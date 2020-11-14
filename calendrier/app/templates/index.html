@@ -1,0 +1,134 @@
+{% extends "menu.html" %}
+
+{% block content %}
+<!-- Content Row -->
+<div class="row">
+  <!-- prevsito -->
+  <div class="col-xl-3 col-md-6 mb-4">
+    <div class="card border-left-primary shadow h-100 py-2">
+      <div class="card-body">
+        <div class="row no-gutters align-items-center">
+          <div class="col mr-2">
+            <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">Previsto</div>
+            {% for form in previsto %}
+            <div class="h5 mb-0 font-weight-bold text-gray-800"> 
+              {% if form.valor %}
+                {{ "R$ %.2f"|format(form.valor) }}
+              {% else %}
+                0
+              {% endif %}
+              </div>
+            {% endfor %}
+          </div>
+          <div class="col-auto">
+            <i class="fas fa-dollar-sign fa-2x text-gray-300"></i>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- realizado -->
+  <div class="col-xl-3 col-md-6 mb-4">
+    <div class="card border-left-success shadow h-100 py-2">
+      <div class="card-body">
+        <div class="row no-gutters align-items-center">
+          <div class="col mr-2">
+            <div class="text-xs font-weight-bold text-success text-uppercase mb-1">Realizado </div>
+            {% for form in confirmado %}
+            <div class="h5 mb-0 font-weight-bold text-gray-800">
+              {% if form.valor %}
+                {{ "R$ %.2f"|format(form.valor) }}
+              {% else %}
+                0
+              {% endif %}
+            </div>
+            {% endfor %}
+          </div>
+          <div class="col-auto">
+            <i class="fas fa-dollar-sign fa-2x text-gray-300"></i>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Não compareceu -->
+  <div class="col-xl-3 col-md-6 mb-4">
+    <div class="card border-left-danger shadow h-100 py-2">
+      <div class="card-body">
+        <div class="row no-gutters align-items-center">
+          <div class="col mr-2">
+            <div class="text-xs font-weight-bold text-danger text-uppercase mb-1">Não compareceu</div>
+            <div class="row no-gutters align-items-center">
+              <div class="col-auto">
+                {% for form in naocompareceu %}
+                <div class="h5 mb-0 mr-3 font-weight-bold text-gray-800">
+                  {% if form.valor %}
+                    {{ "R$ %.2f"|format(form.valor)  }}  
+                  {% else %}
+                    0
+                  {% endif %}
+                  </div>
+                {% endfor %}
+              </div>
+            </div>
+          </div>
+          <div class="col-auto">
+            <i class="fas fa-frown fa-2x text-gray-300"></i>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- agenda para hoje -->
+  <div class="col-xl-3 col-md-6 mb-4">
+    <div class="card border-left-warning shadow h-100 py-2">
+      <div class="card-body">
+        <div class="row no-gutters align-items-center">
+          <div class="col mr-2">
+            <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">Agendamentos para hoje</div>
+            {% for form in atendimento %}
+            <div class="h5 mb-0 font-weight-bold text-gray-800">
+              {% if form.totalagenda %}
+                {{ form.totalagenda }}
+              {% else %}
+                0
+              {% endif %}
+              
+            </div>
+            {% endfor%}
+
+          </div>
+          <div class="col-auto">
+            <i class="fas fa-calendar fa-2x text-gray-300"></i>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-md-12 mb-4">
+    <div class="card shadow mb-4">
+      <div class="card-header py-3">        
+        <h6 class="m-0 font-weight-bold text-primary">
+          {% if total %}
+            Movimentação do mês {{ "R$ %.2f"|format(total) }}
+          {% else %}
+            Movimentação do mês R$ 0.00
+          {% endif %}
+        </h6>
+      </div>
+      <div class="card-body">
+        {% for recebimento in recebimentos %}
+        <h4 class="small font-weight-bold"> {{ recebimento.descricao }} {{ "R$ %.2f"|format(recebimento.valorservico) }} <span class="float-right">{{ "%.2f"|format(recebimento.perc) }} %</span></h4>
+        <div class="progress mb-4">
+          <div class="progress-bar" role="progressbar" style="width: {{ recebimento.perc }}%" aria-valuenow="{{ recebimento.perc }}" aria-valuemin="0" aria-valuemax="{{ total }}"></div>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

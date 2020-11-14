@@ -1,0 +1,239 @@
+{% extends "menu.html" %}
+
+{% block menuhead %} 
+<div class="d-sm-flex align-items-center justify-content-between mb-4">
+        <h1 class="h3 mb-0 text-gray-800">{{ titulo }}</h1>
+      </div>
+{% endblock %}
+
+{% block content %}
+    <!-- Content Row -->
+    <div class="row">
+        <form action="" method="post" autocomplete="off">
+        {{ form.hidden_tag() }}        
+        {% if operacao == 1 %}
+            <div class="form-group">
+                {{ form.tipo_movimentacao(class='custom-select', disabled=True) }}
+            </div>
+            <div class="form-group">
+                {{ form.contas(class='custom-select', disabled=True) }}
+            </div>
+            <div class="form-group">
+                {{ form.descricao(size=150, class='form-control', disabled=True) }}
+            </div>
+
+            <div class="form-group">
+                <div class="card">
+                    <div class="card-header text-primary">Data e valor previsto</div>
+                    <div class="card-body">
+                        <div class="form-group">
+                            <div class="input-group">                
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text">
+                                        <i class="fas fa-fw fa-calendar-alt"></i>
+                                    </span>
+                                </div>
+                                {{ form.data_prevista(class='form-control', disabled=True) }}
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="input-group">                
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text">R$</span>
+                                </div>
+                                {{ form.valor_previsto(class='form-control', disabled=True) }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="card">
+                    <div class="card-header text-primary">Data e valor realizado</div>
+                    <div class="card-body">
+                        <div class="form-group">
+                            <div class="input-group">                
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text" >
+                                        <i class="fas fa-fw fa-calendar-alt"></i>
+                                    </span>
+                                </div>
+                                {{ form.data_efetivacao(class='form-control', disabled=True) }}
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="input-group">                
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text">R$</span>
+                                </div>
+                                {{ form.valor_realizado(class='form-control', disabled=True) }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% else %}
+            <div class="form-row">
+                <div class="form-group col-md-6">
+                    {{ form.tipo_movimentacao(class='custom-select') }}
+                </div>
+                <div class="form-group col-md-6">
+                    {{ form.contas(class='custom-select') }}
+                </div>
+            </div>
+            <div class="form-group">
+                {{ form.descricao(size=150, class='form-control') }}
+            </div>
+            <div class="row">
+                <div class="col-lg-6">
+                    <div class="form-group">
+                        <div class="card mb-4">
+                            <div class="card-header text-primary">Data e valor previsto</div>
+                            <div class="card-body">
+                                <div class="form-group">
+                                    <div class="input-group">                
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text">
+                                                <i class="fas fa-fw fa-calendar-alt"></i>
+                                            </span>
+                                        </div>
+                                        {{ form.data_prevista(class='form-control') }}
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="input-group">                
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text">R$</span>
+                                        </div>
+                                        {{ form.valor_previsto(class='form-control') }}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <div class="form-group">
+                        <div class="card mb-4">
+                            <div class="card-header text-primary">Data e valor realizado</div>
+                            <div class="card-body">
+                                <div class="form-group">
+                                    <div class="input-group">                
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text" >
+                                                <i class="fas fa-fw fa-calendar-alt"></i>
+                                            </span>
+                                        </div>
+                                        {{ form.data_efetivacao(class='form-control') }}
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="input-group">                
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text">R$</span>
+                                        </div>
+                                        {{ form.valor_realizado(class='form-control') }}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% endif %}
+        <div class="btn-group">            
+            {% if operacao == 1 %}
+                <a href="{{ url_for('lancamentoseditar', id=form.id) }}" class="btn btn-primary">Editar</a>
+            {% else %}
+                <button class="btn btn-primary" id="submit" type="submit">Salvar</button>
+            {% endif %}
+            <a href="{{ url_for('lancamentoslistar') }}" class="btn btn-danger">Cancelar</a>
+        </div>
+        </form>
+    </div>
+{% endblock %}
+
+{% block scriptmenu %}
+<script>
+    
+    $(document).ready(function() {
+        /* validação dos campos */
+        $("#descricao_validator").fadeTo(4000, 900).slideUp(900, function(){
+            $("#descricao_validator").slideUp(9000);
+        });
+
+        $('#valor_previsto').mask("###,###,##0.00", {reverse: true});
+        $('#valor_realizado').mask("###,###,##0.00", {reverse: true});
+
+        $('#data_prevista').datetimepicker({
+            format:'d/m/Y',
+            mask:true,
+            timepicker:false,
+        });
+
+        $('#data_efetivacao').datetimepicker({
+            format:'d/m/Y',
+            mask:true,
+            timepicker:false,
+        });
+    });
+
+    $("form").submit(function(event) {
+        var validacampos = Boolean;
+        
+        $('#tipo_movimentacao').css('border', '');
+        $('#contas').css('border', '');
+        $('#descricao').css('border', '');
+        $('#data_prevista').css('border', '');
+        $('#valor_previsto').css('border', '');
+        $('#data_efetivacao').css('border', '');
+        $('#valor_realizado').css('border', '');
+
+        
+        validacampos = true;
+
+        if ($('#tipo_movimentacao').val()=='__None'){
+            $('#tipo_movimentacao').css('border', '1px solid #f00');
+            validacampos = false;
+        }
+        
+        if ($('#contas').val()=='_None'){
+            $('#contas').css('border', '1px solid #f00');
+            validacampos = false;
+        }
+
+        if ($('#descricao').val()==''){
+            $('#descricao').css('border', '1px solid #f00');
+            validacampos = false;
+        }
+        
+        if ($('#data_prevista').val()==''){
+            $('#data_prevista').css('border', '1px solid #f00');
+            validacampos = false;
+        }
+        
+        if ($('#valor_previsto').val()==''){
+            $('#valor_previsto').css('border', '1px solid #f00');
+            validacampos = false;
+        }
+        
+        if ($('#valor_realizado').val()!='' || $('#data_efetivacao').val()!=''){
+
+            if ($('#data_efetivacao').val()==''){
+                $('#data_efetivacao').css('border', '1px solid #f00');
+                validacampos = false;
+            }
+            
+            if ($('#valor_realizado').val()==''){
+                $('#valor_realizado').css('border', '1px solid #f00');
+                validacampos = false;
+            }
+        }
+
+
+        if (validacampos == false){
+            event.preventDefault();
+        }
+  });
+</script>
+{% endblock %}

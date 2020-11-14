@@ -1,0 +1,85 @@
+{% extends "menu.html" %}
+
+{% block menuhead %} 
+<div class="d-sm-flex align-items-center justify-content-between mb-4">
+  <h1 class="h3 mb-0 text-gray-800">{{ titulo }}</h1>
+  <div class="btn-group" role="group">
+    <a href="{{ url_for('clientecadastrar') }}" id="novo" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm">
+      <i class="fas fa-file fa-sm text-white-50"></i> Novo</a>          
+  </div>
+</div>
+{% endblock %}
+
+{% block content %}
+    <!-- Content Row -->
+    <div class="row">
+      <div class="card shadow mb-4">
+        <div class="card-body">
+          <div class="table-responsive">
+              <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                <thead>
+                  <tr>
+                    <th>Ação</th>
+                    <th>Código</th>
+                    <th>Nome</th>
+                    <th>Telefone</th>
+                    <th>Data Nasc.</th>
+                  </tr>
+                </thead>
+                <tfoot>
+                  <tr>
+                    <th>Ação</th>
+                    <th>Código</th>
+                    <th>Nome</th>
+                    <th>Telefone</th>
+                    <th>Data Nasc.</th>
+                  </tr>
+                </tfoot>
+                <tbody>
+                  {% for form in forms %}
+                  <tr>
+                    <td>
+                        <a href="{{ url_for('.clienteexibir', id=form.id) }}" id="visualizar" class="btn btn-primary btn-circle btn-sm"><i class="fas fa-search"></i></a>
+                        <a href="{{ url_for('clienteeditar', id=form.id) }}" id="editar" class="btn btn-primary btn-circle btn-sm">
+                          <i class="fas fa-edit fa-sm"></i></a>
+                        <button onclick="carregar_codigo({{ form.id }}, '{{ form.nome}}')"  class="btn btn-danger btn-circle btn-sm" data-toggle="modal" data-target="#excluir_modal"><i class="fas fa-trash fa-sm"></i></button>
+                    </td>
+                    <td>{{ form.id }}</td>
+                    <td>{{ form.nome }}</td>
+                    <td>{{ form.telefone }}</td>
+                    <td>
+                      {% if form.data_nasc %}
+                        {{ form.data_nasc.strftime('%d/%m/%Y') }}
+                      {% endif %}
+                    </td>
+                    </td>
+                  </tr>
+                  {% endfor %}
+                </tbody>
+              </table>
+          </div>
+        </div>
+      </div>
+    </div>
+{% endblock %}
+
+
+{% block scriptmenu %}
+<script>
+  $(document).ready(function() {
+    $('#dataTable').DataTable({
+                responsive: true,
+                language: {
+                    url : '/static/datatables/translate/pt-br.json'
+                }
+            });
+  } );
+  
+  function carregar_codigo(id, desc){
+      document.getElementById('FormExcluir').setAttribute('action', "{{ url_for('clienteexcluir') }}");
+      document.getElementById('codigo').setAttribute('value', id);
+      document.getElementById('descricao_exc').append(desc);
+      
+    }
+</script>
+{% endblock %}

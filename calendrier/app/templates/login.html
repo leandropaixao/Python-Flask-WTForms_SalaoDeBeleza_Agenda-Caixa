@@ -1,0 +1,85 @@
+{% extends "base.html" %}
+
+{% block base %}
+  <div class="container">
+    <!-- Outer Row -->
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+          {% for category, message in messages %}
+              <div class="row fixed" style="display: block; position: fixed; top: 0; padding-top: 10px; z-index: 9999">
+                <div class=".col-md-4 .col-md-offset-2">
+                        {% if category == 'success' %}
+                        <div class="alert alert-success alert-dismissible" id="alert" style="opacity: 500; display: none;">
+                          <a href="#" class="close" data-dismiss="alert" aria-label="close">×</a>
+                          <strong>Sucesso!</strong> 
+                        {% else %}
+                          <div class="alert alert-warning alert-dismissible" id="alert" style="opacity: 500; display: none;">
+                          <a href="#" class="close" data-dismiss="alert" aria-label="close">×</a>
+                          <strong>Atenção!</strong>
+                        {% endif %}
+                        {{ message }}
+                    </div>
+                </div>
+            </div>
+          {% endfor %}
+      {% endif %}
+    {% endwith %}
+    
+    <div class="row justify-content-center">
+
+      <div class="col-xl-10 col-lg-12 col-md-9">
+
+        <div class="card o-hidden border-0 shadow-lg my-5">
+          <div class="card-body p-0">
+            <!-- Nested Row within Card Body -->
+            <div class="row">
+              <div class="col-lg-6 d-none d-lg-block bg-login-image"></div>
+              <div class="col-lg-6">
+                <div class="p-5">
+                  <div class="text-center">
+                    <h1 class="h4 text-gray-900 mb-4">Bienvenue au calendrier!</h1>
+                  </div>
+                  <form class="user" action="" method="post" autocomplete="off" novalidate>
+                    {{ form.hidden_tag() }}
+                    <div class="form-group">
+                        {{ form.username(size=32, class='form-control form-control-user') }}
+                        {% for error in form.username.errors %}
+                        <span style="color: red;">{{ error }}</span>
+                        {% endfor %}
+                    </div>
+                    <div class="form-group">
+                        {{ form.password(size=32, class='form-control form-control-user') }}
+                        {% for error in form.password.errors %}
+                        <span style="color: red;">{{ error }}</span>
+                        {% endfor %}
+                    </div>
+                    <div class="form-group">
+                      <!-- 
+                      <div class="custom-control custom-checkbox small">
+                        <input type="checkbox" class="custom-control-input" id="customCheck">
+                        <label class="custom-control-label" for="customCheck">Rappelle moi</label>
+                      </div>
+                      -->
+                    </div>
+                    {{ form.submit(class='btn btn-warning btn-user btn-block') }}
+                  </form>
+                  <hr>
+                  <!-- 
+                  <div class="text-center">
+                    <a class="small" href="forgot-password.html">Forgot Password?</a>
+                  </div>
+                  <div class="text-center">
+                    <a class="small" href="register.html">Create an Account!</a>
+                  </div>
+                  -->
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </div>
+{% endblock %}
