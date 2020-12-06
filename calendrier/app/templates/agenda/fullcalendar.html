@@ -297,8 +297,8 @@
     selectable: true,
     selectMirror: true,
     select: function(info){
-      alert(info.startStr);
-      alert(info.endStr);
+      //alert(info.startStr);
+      //alert(info.endStr);
       $('#data_agenda_inicio').val(moment(info.startStr).format('DD/MM/YYYY HH:mm'));
       $('#data_agenda_fim').val(moment(info.endStr).format('DD/MM/YYYY HH:mm'));
       $('form').attr('action', '{{ url_for('agendacadastrar') }}' );
